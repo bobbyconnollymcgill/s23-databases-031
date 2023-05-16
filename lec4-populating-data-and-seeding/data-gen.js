@@ -12,17 +12,14 @@ const pool = new pg.Pool({
   password: "password",
 });
 
-const conn = await pool.connect();
+await pool.connect();
 
 for (let i = 0; i < 1000000; i++) {
   const lastName = faker.person.lastName();
   const firstName = faker.person.firstName();
   const email = faker.internet.email();
-
   const genderArr = ["male", "female", "non-binary", "other", "unknown"];
-
   const gender = genderArr[Math.floor(Math.random() * genderArr.length)];
-
   const dob = faker.date.past({ years: 90 }).toISOString().split("T")[0]; // ex:2000-01-01
 
   const text = `
@@ -31,7 +28,7 @@ for (let i = 0; i < 1000000; i++) {
 
   const data = [lastName, firstName, dob, gender, email];
 
-  await conn.query(text, data);
+  await pool.query(text, data);
 
   if (i > 0) {
     if (i % 1000 === 0) {

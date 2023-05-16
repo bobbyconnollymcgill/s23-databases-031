@@ -1,8 +1,19 @@
-// const { faker } = require("@faker-js/faker");
-// const { Pool } = require("pg");
-
 import { faker } from "@faker-js/faker";
 import pg from "pg";
+
+let str = "";
+for (let k = 0; k < 5000; k++) {
+  str += `($${k * 5 + 1}, $${k * 5 + 2}, $${k * 5 + 3}, $${k * 5 + 4}, $${
+    k * 5 + 5
+  }),`;
+}
+
+let modifiedStr = str.slice(0, -1);
+
+const text =
+  `
+INSERT INTO patients (last_name, first_name, birth_date, gender, email)
+VALUES ` + modifiedStr;
 
 const client = new pg.Client({
   host: "localhost",
@@ -12,55 +23,27 @@ const client = new pg.Client({
   password: "password",
 });
 
-const conn = await client.connect();
+await client.connect();
 
 const NUM_OF_RECORDS = 1000000;
 const RECORDS_PER_BATCH = 5000;
 
 const NUM_OF_BATCHES = Math.floor(NUM_OF_RECORDS / RECORDS_PER_BATCH);
 
-for (let i = 0; i < NUM_OF_BATCHES; i++) {
-  const data = [];
+for (let i = 1; i <= NUM_OF_BATCHES; i++) {
+  let data = [];
 
-  for (let j = 0; j < RECORDS_PER_BATCH; j++) {
+  for (let j = 1; j <= RECORDS_PER_BATCH; j++) {
     const lastName = faker.person.lastName();
     const firstName = faker.person.firstName();
     const email = faker.internet.email();
     const genderArr = ["male", "female", "non-binary", "other", "unknown"];
     const gender = genderArr[Math.floor(Math.random() * genderArr.length)];
     const dob = faker.date.past({ years: 90 }).toISOString().split("T")[0]; // ex:2000-01-01
-    data.push([lastName, firstName, dob, gender, email]);
+    data = data.concat([lastName, firstName, dob, gender, email]);
   }
 
-  const text = `
-  INSERT INTO patients (last_name, first_name, birth_date, gender, email)
-  VALUES ($1, $2, $3, $4, $5)`;
+  await client.query(text, data); // 200 invocations versus the
 
-  // to be continue ...
-
-  // await conn.query(text, data); // 200 invocations versus the
+  console.log(`Batch ${i} pushed`);
 }
-
-// const lastName = faker.person.lastName();
-// const firstName = faker.person.firstName();
-// const email = faker.internet.email();
-
-// const genderArr = ["male", "female", "non-binary", "other", "unknown"];
-
-// const gender = genderArr[Math.floor(Math.random() * genderArr.length)];
-
-// const dob = faker.date.past({ years: 90 }).toISOString().split("T")[0]; // ex:2000-01-01
-
-// const text = `
-//   INSERT INTO patients (last_name, first_name, birth_date, gender, email)
-//   VALUES ($1, $2, $3, $4, $5)`;
-
-// const data = [lastName, firstName, dob, gender, email];
-
-// await conn.query(text, data);
-
-// if (i > 0) {
-//   if (i % 1000 === 0) {
-//     console.log(`${i} rows processed`);
-//   }
-// }

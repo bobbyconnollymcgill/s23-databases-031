@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "test-batch": "node test.js",
     "script": "node --inspect-brk data-gen.js",
+    "script:batch": "node --inspect data-gen-batched.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
