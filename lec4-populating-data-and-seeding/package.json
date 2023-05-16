@@ -1,0 +1,17 @@
+{
+  "name": "lec4-populating-data-and-seeding",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "script": "node --inspect-brk data-gen.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@faker-js/faker": "^8.0.1",
+    "pg": "^8.11.0"
+  }
+}

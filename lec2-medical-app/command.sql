@@ -1,0 +1,2 @@
+INSERT INTO patient_registrations (last_name, first_name, birth_date, gender, health_card, email, phone_number, street, apartment, city, province_state, zip_postal, country, emergency_contact_name, emergency_contact_phone, social_insurance_number, general_note)
+VALUES ('Smith', 'Jane', '1985-05-05', 'female', NULL, NULL, NULL, '456 Oak St', NULL, 'Othertown', 'Otherstate', '54321', 'USA', 'John Smith', '9876543210', '987-65-4321', NULL);
