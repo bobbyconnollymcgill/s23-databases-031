@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Zoo Management</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #4caf50;
+        color: white;
+      }
+      .sign-out {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #4caf50;
+        color: white;
+        text-align: center;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Zoo Animals</h1>
+    <table id="animals-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Species</th>
+          <th>Age</th>
+          <th>Enclosure ID</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filled by JavaScript -->
+      </tbody>
+    </table>
+    <div class="sign-out" onclick="signOut()">Sign Out</div>
+    <script>
+      async function fetchAnimals() {
+        const response = await fetch("/animals");
+        const animals = await response.json();
+        const animalsTable = document.getElementById("animals-table");
+
+        for (const animal of animals) {
+          const row = animalsTable.insertRow(-1);
+          row.insertCell(0).textContent = animal.id;
+          row.insertCell(1).textContent = animal.name;
+          row.insertCell(2).textContent = animal.species;
+          row.insertCell(3).textContent = animal.age;
+          row.insertCell(4).textContent = animal.enclosure_id;
+        }
+      }
+
+      function signOut() {
+        document.cookie = "session_id=;"; // this is busted
+        window.location.href = "/";
+      }
+
+      fetchAnimals();
+    </script>
+  </body>
+</html>

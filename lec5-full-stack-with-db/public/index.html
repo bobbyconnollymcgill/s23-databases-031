@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Zoo Management System</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        margin: 0 auto;
+        padding-top: 50px;
+      }
+      input,
+      button {
+        margin-bottom: 10px;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="signup-form">
+      <h2>Sign Up</h2>
+      <input type="email" id="signup-email" placeholder="Email" required />
+      <input
+        type="password"
+        id="signup-password"
+        placeholder="Password"
+        required
+      />
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <form id="login-form">
+      <h2>Login</h2>
+      <input type="email" id="login-email" placeholder="Email" required />
+      <input
+        type="password"
+        id="login-password"
+        placeholder="Password"
+        required
+      />
+      <button type="submit">Login</button>
+    </form>
+
+    <script>
+      const signupForm = document.getElementById("signup-form");
+      const loginForm = document.getElementById("login-form");
+
+      signupForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("signup-email").value;
+        const password = document.getElementById("signup-password").value;
+        fetch("/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }).then((res) => {
+          if (res.ok) {
+            alert("Signup succeeded.");
+          } else {
+            alert("Signup failed");
+          }
+        });
+      });
+
+      loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+        fetch("/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ email, password }),
+        }).then((res) => {
+          if (res.ok) {
+            window.location.href = "/zoo";
+          } else {
+            alert("Login failed");
+          }
+        });
+      });
+
+      //   // Check if user is already signed in
+      fetch("/me", {
+        method: "GET",
+        credentials: "include",
+      }).then((res) => {
+        if (res.ok) {
+          window.location.href = "/zoo";
+        }
+      });
+    </script>
+  </body>
+</html>
