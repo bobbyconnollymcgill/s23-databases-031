@@ -73,7 +73,7 @@
         fetch("/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          credentials: "include",
+          credentials: "include", // think you can remove this
           body: JSON.stringify({ email, password }),
         }).then((res) => {
           if (res.ok) {
@@ -84,10 +84,10 @@
         });
       });
 
-      //   // Check if user is already signed in
+      // Check if user is already signed in
       fetch("/me", {
         method: "GET",
-        credentials: "include",
+        credentials: "include", // think you can remove this
       }).then((res) => {
         if (res.ok) {
           window.location.href = "/zoo";

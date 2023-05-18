@@ -15,7 +15,7 @@ const authMiddleware = async (req, res, next) => {
 
   const session = rows[0];
 
-  if (!session || new Date() > session.expires_at) {
+  if (!session || new Date() > session.expires_at || !session.is_valid) {
     res.status(401).json({ message: "Unauthorized" });
     return;
   }

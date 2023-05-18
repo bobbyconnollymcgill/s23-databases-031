@@ -64,7 +64,13 @@
       }
 
       function signOut() {
-        document.cookie = "session_id=;"; // this is busted
+        // document.cookie = "session_id=;"; // this is busted
+
+        fetch("/signout", {
+          method: "POST",
+          // credentials: "include",
+        });
+
         window.location.href = "/";
       }
 

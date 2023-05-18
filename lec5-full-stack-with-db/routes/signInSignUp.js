@@ -61,13 +61,34 @@ signUpSignIn.post("/login", async (req, res) => {
     );
 
     // Set a cookie with the session id
-    res.cookie("session_id", sessionId, { expires: expiresAt, httpOnly: true });
+    res.cookie("session_id", sessionId, {
+      expires: expiresAt,
+      httpOnly: true,
+      sameSite: "Strict",
+    });
 
     // Send a response indicating successful login
     res.status(200).json({ message: "User logged in successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Something terrible happened" });
+  }
+});
+
+signUpSignIn.post("/signout", async (req, res) => {
+  try {
+    const { session_id } = req.cookies;
+    if (session_id) {
+      await db.query(
+        "UPDATE sessions SET is_valid = false WHERE session_id = $1",
+        [session_id]
+      );
+    }
+  } catch (err) {
+    console.error(err);
+  } finally {
+    res.clearCookie("session_id");
+    res.end();
   }
 });
 
